@@ -1,0 +1,34 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+env/
+
+# Environment variables / secrets
+*.env
+.env
+
+# IDE stuff
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Bytecode
+*.pyc
+
+# Build files
+build/
+dist/
+*.egg-info/
+
+# Database / local storage
+db.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
