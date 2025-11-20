@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *.pyo
+web/src/config.js
+
 
 # Virtual environment
 venv/
