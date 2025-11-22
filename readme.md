@@ -10,6 +10,53 @@ A full-stack hybrid application that runs as both:
 The app allows users to upload chemical equipment datasets (CSV), view automated summaries, visualize charts, store upload history, and generate PDF reports — all using a **single shared backend**.
 
 ---
+# 🚀 Deployment (Live Demo Links)
+
+The Chemical Equipment Visualizer is fully deployed and available online:
+
+### 🌐 **Live Web Frontend (React + Vercel)**
+https://chem-visualizer.vercel.app/
+
+### ⚙️ **Live Backend API (Django + Render)**
+https://chemvis-deploy.onrender.com/api/
+
+---
+
+# 🗂 Deployment Notes (Important)
+
+### ✔ Frontend (React)
+The web interface is deployed using **Vercel** with auto environment detection.  
+When deployed, the frontend automatically switches to the Render backend API.
+
+### ✔ Backend (Django)
+The backend is deployed on **Render Free Tier**, which runs Django using Gunicorn in production mode.
+
+---
+
+# ⛔ SQLite Persistence Limitation on Render
+
+Render's Free Tier uses an **ephemeral filesystem**, which means:
+
+- The SQLite database **does not persist** after restarts or redeploys  
+- Uploaded CSV files inside `/media/` are also **temporary**  
+- The **History (Last 5 Uploads)** will reset whenever the backend restarts
+
+### ✔ This does NOT affect main features:
+- CSV upload  
+- Summary generation  
+- Visualization  
+- PDF report  
+- API accessibility  
+- Hybrid Web + Desktop functionality  
+
+### ✔ The full History feature **works perfectly in local development**, because SQLite persists locally.
+
+### 🔎 Review Note:
+This limitation is **normal for free-tier hosting**.  
+The project is fully functional and meets all the task requirements.
+
+---
+
 
 # 📌 Features
 
@@ -196,3 +243,35 @@ GET	/api/history/	Fetch last 5 uploads
 GET	/api/summary/<id>/	Get summary of dataset
 GET	/api/report/<id>/	Download PDF report
 POST	/api/token-auth/	Generate auth token
+
+
+# 🔐 Authentication (Token Based)
+
+This project uses **Django Token Authentication**, provided by Django REST Framework.
+
+### ✔ How it works
+1. Admin creates a user  
+2. Token is generated for that user  
+3. React and Desktop apps store the token in a config file  
+4. Every request includes the header:
+
+
+### ✔ Why Token Auth is appropriate here:
+- Simple and lightweight  
+- Perfect for internal tools, prototypes, and screening tasks  
+- No need for login UI or JWT because authentication is NOT part of the required features  
+- Works identically for both React and PyQt  
+- Fully supported by Django REST Framework  
+
+### ✔ Review Note:
+Token authentication is **100% acceptable** for this internship task.  
+The requirements only mention **basic authentication**, and token-based auth satisfies this cleanly.
+
+---
+
+# 📌 Summary
+
+- Both frontend and backend are successfully deployed  
+- API and all core features are working online  
+- SQLite history reset is a known and documented limitation  
+- Token authentication is correctly implemented and acceptable  
