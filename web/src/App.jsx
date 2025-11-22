@@ -43,14 +43,17 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        padding: "30px",
-        maxWidth: "1100px",
-        margin: "0 auto",
-        fontFamily: "Arial",
-      }}
-    >
+ <div
+  style={{
+    padding: "30px",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    fontFamily: "Inter, Arial, sans-serif",
+    background: "#f5f7fa",
+    minHeight: "100vh",
+  }}
+>
+
       <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
         Chemical Equipment Visualizer — Web
       </h1>
@@ -59,13 +62,29 @@ export default function App() {
       <UploadForm onUpload={setData} />
 
       {/* History list */}
-      <HistoryList onSelect={fetchSummary} />
+      <div style={{
+  background: "white",
+  padding: "20px",
+  borderRadius: "12px",
+  marginTop: "20px",
+  boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
+}}>
+  <HistoryList onSelect={fetchSummary} />
+</div>
+
 
       {/* Display data only when available */}
       {data && (
         <>
           {/* Summary Cards */}
-          <h2 style={{ marginTop: "30px" }}>Summary</h2>
+          <h2 style={{
+  marginTop: "30px",
+  fontWeight: "600",
+  letterSpacing: "0.5px"
+}}>
+  Summary
+</h2>
+
 <SummaryCards summary={data.summary} />
 
 
@@ -79,19 +98,21 @@ export default function App() {
 
           {/* Download PDF */}
           <button
-            onClick={downloadPDF}
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "5px",
-              background: "#007bff",
-              color: "white",
-              cursor: "pointer",
-            }}
-          >
-            Download PDF
-          </button>
+  onClick={downloadPDF}
+  style={{
+    marginTop: "20px",
+    padding: "12px 20px",
+    borderRadius: "8px",
+    border: "none",
+    background: "#0d6efd",
+    color: "white",
+    fontSize: "15px",
+    cursor: "pointer",
+  }}
+>
+  Download PDF Report
+</button>
+
         </>
       )}
     </div>

@@ -3,9 +3,10 @@ const cardStyle = {
   padding: "20px",
   borderRadius: "12px",
   background: "#ffffff",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  border: "1px solid #e8e8e8",
+  boxShadow: "0 1px 8px rgba(0,0,0,0.06)",
   textAlign: "center",
-  border: "1px solid #eee",
+  transition: "0.2s",
 };
 
 const containerStyle = {
