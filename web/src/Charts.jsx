@@ -6,19 +6,22 @@ ChartJS.register(BarElement, CategoryScale, LinearScale);
 export default function Charts({ summary }) {
   if (!summary) return null;
 
-  const labels = Object.keys(summary.type_distribution);
-  const values = Object.values(summary.type_distribution);
+  const dist = summary.type_distribution || {};
+  const labels = Object.keys(dist);
+  const values = Object.values(dist);
 
   return (
-    <div style={{ width: 500, marginTop: 30 }}>
+    <div style={{ width: "600px", marginTop: "30px" }}>
+      <h3>Equipment Type Distribution</h3>
+
       <Bar
         data={{
           labels,
           datasets: [
             {
-              label: "Equipment Count",
+              label: "Count",
               data: values,
-              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              backgroundColor: "rgba(75, 192, 192, 0.7)",
             },
           ],
         }}

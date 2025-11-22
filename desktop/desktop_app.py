@@ -33,9 +33,9 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Chemical Equipment Visualizer — Desktop")
-        self.setMinimumSize(1000, 600)
+        self.setMinimumSize(1200, 650)
 
-        # Layouts
+        # Main layouts
         main_layout = QHBoxLayout()
         left_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
@@ -48,9 +48,27 @@ class MainWindow(QWidget):
         self.history_list = QListWidget()
         self.history_list.itemClicked.connect(self.load_from_history)
 
-        # Label for summary
-        self.info_label = QLabel("Upload or select a dataset from history.")
-        self.info_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+        # ---------- SUMMARY CARDS ----------
+        self.summary_layout = QHBoxLayout()
+
+        self.count_label = QLabel("")
+        self.flow_label = QLabel("")
+        self.press_label = QLabel("")
+        self.temp_label = QLabel("")
+
+        summary_labels = [self.count_label, self.flow_label, self.press_label, self.temp_label]
+
+        for lbl in summary_labels:
+            lbl.setStyleSheet("""
+                font-size: 14px;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #ffffff;
+                min-width: 160px;
+                text-align: center;
+            """)
+            self.summary_layout.addWidget(lbl)
 
         # Table preview
         self.table = QTableWidget()
@@ -63,12 +81,12 @@ class MainWindow(QWidget):
         self.pdf_btn.clicked.connect(self.download_pdf)
         self.pdf_btn.setEnabled(False)
 
-        # Add widgets to layouts
+        # Assemble layouts
         left_layout.addWidget(self.upload_btn)
         left_layout.addWidget(QLabel("History (Last 5 Uploads):"))
         left_layout.addWidget(self.history_list)
 
-        right_layout.addWidget(self.info_label)
+        right_layout.addLayout(self.summary_layout)
         right_layout.addWidget(self.table)
         right_layout.addWidget(self.chart)
         right_layout.addWidget(self.pdf_btn)
@@ -102,7 +120,7 @@ class MainWindow(QWidget):
 
 
     # ------------------------------------
-    # When clicking an item from history
+    # Load data from history selection
     # ------------------------------------
     def load_from_history(self, item):
         text = item.text()
@@ -155,18 +173,26 @@ class MainWindow(QWidget):
 
 
     # ------------------------------------
-    # Update table + chart + info
+    # Update table + chart + summary
     # ------------------------------------
     def update_ui(self, data):
         self.current_id = data["id"]
         self.pdf_btn.setEnabled(True)
 
-        self.info_label.setText(
-            f"Dataset: {data['name']} | Total Rows: {data['summary']['total_count']}"
-        )
+        summary = data["summary"]
+        avg = summary["averages"]
 
+        # Summary cards update
+        self.count_label.setText(f"<b>Total Count</b><br>{summary['total_count']}")
+        self.flow_label.setText(f"<b>Avg Flowrate</b><br>{avg['Flowrate']:.2f}")
+        self.press_label.setText(f"<b>Avg Pressure</b><br>{avg['Pressure']:.2f}")
+        self.temp_label.setText(f"<b>Avg Temperature</b><br>{avg['Temperature']:.2f}")
+
+        # Update table
         self.show_table(data["preview_csv"])
-        self.show_chart(data["summary"])
+
+        # Update chart
+        self.show_chart(summary)
 
 
     # ------------------------------------
@@ -185,7 +211,7 @@ class MainWindow(QWidget):
 
 
     # ------------------------------------
-    # Bar Chart (Type Distribution)
+    # Bar Chart
     # ------------------------------------
     def show_chart(self, summary):
         type_dist = summary["type_distribution"]
@@ -201,7 +227,7 @@ class MainWindow(QWidget):
 
 
     # ------------------------------------
-    # Download PDF from backend
+    # Download PDF
     # ------------------------------------
     def download_pdf(self):
         try:
@@ -227,11 +253,10 @@ class MainWindow(QWidget):
 
 
 # ------------------------------------
-# Start application
+# Run App
 # ------------------------------------
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = MainWindow()
     win.show()
     sys.exit(app.exec_())
-

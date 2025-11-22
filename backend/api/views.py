@@ -91,9 +91,35 @@ class History(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        qs = Dataset.objects.all().order_by('-uploaded_at')[:5]
-        serializer = DatasetSerializer(qs, many=True)
-        return Response(serializer.data)
+        datasets = Dataset.objects.all().order_by('-uploaded_at')[:5]
+
+        result = []
+        for ds in datasets:
+
+            # Load CSV
+            df = pd.read_csv("." + ds.file.url)
+
+            # Summary calculations
+            summary = {
+                "total_count": len(df),
+                "averages": {
+                    "Flowrate": df["Flowrate"].mean(),
+                    "Pressure": df["Pressure"].mean(),
+                    "Temperature": df["Temperature"].mean(),
+                },
+                "type_distribution": df["Type"].value_counts().to_dict()
+            }
+
+            # Append result
+            result.append({
+                "id": ds.id,
+                "name": ds.name,
+                "uploaded_at": ds.uploaded_at,
+                "summary": summary
+            })
+
+        return Response(result)
+
 
 
 # -----------------------------
